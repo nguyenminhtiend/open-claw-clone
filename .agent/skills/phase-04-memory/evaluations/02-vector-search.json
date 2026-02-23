@@ -1,0 +1,11 @@
+{
+  "skill": "phase-04-memory-persistence",
+  "query": "Search memory semantically for 'user prefers dark mode'",
+  "expected_behavior": [
+    "The memory_search tool embeds the query and performs cosine similarity search over the SQLite vector store",
+    "Returns at least 1 result with the relevant chunk content and its source file path",
+    "Results are ranked by descending similarity score",
+    "A query for a topic not present in memory returns an empty results array, not an error",
+    "The search completes in under 500ms for a MEMORY.md with 50+ chunks"
+  ]
+}

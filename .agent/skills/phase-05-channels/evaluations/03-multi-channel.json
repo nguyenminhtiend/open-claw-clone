@@ -1,0 +1,11 @@
+{
+  "skill": "phase-05-channels-messaging",
+  "query": "Run the Telegram and Discord adapters simultaneously and verify they handle messages independently",
+  "expected_behavior": [
+    "Both adapters are registered in the ChannelManager and show as connected in gateway.status",
+    "A message sent via Telegram is routed only through the Telegram adapter's pipeline context",
+    "A message sent via Discord does not interfere with any in-flight Telegram response",
+    "A Telegram disconnection error is caught and logged without affecting the Discord adapter",
+    "The ChannelManager's getStatus() correctly reports each adapter's state independently"
+  ]
+}

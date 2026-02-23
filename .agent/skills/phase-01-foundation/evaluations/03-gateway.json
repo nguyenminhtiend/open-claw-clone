@@ -1,0 +1,11 @@
+{
+  "skill": "phase-01-foundation-gateway",
+  "query": "Start the Gateway and verify it accepts WebSocket connections and JSON-RPC calls",
+  "expected_behavior": [
+    "Gateway starts and listens on port 18789 by default",
+    "GET /health returns HTTP 200 with JSON status payload",
+    "WebSocket client can connect and complete a session.create JSON-RPC call successfully",
+    "session.list returns the created session in the response",
+    "Config file change triggers a hot-reload without restarting the process"
+  ]
+}

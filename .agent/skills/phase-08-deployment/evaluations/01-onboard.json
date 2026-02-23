@@ -1,0 +1,11 @@
+{
+  "skill": "phase-08-cli-web-deployment",
+  "query": "Run oclaw onboard for the first time and verify it creates a valid config and memory files",
+  "expected_behavior": [
+    "The onboard wizard prompts for LLM provider, API key, and default model interactively",
+    "A valid config.json5 is written to ~/.openclaw-clone/config.json5 after the wizard completes",
+    "Running 'oclaw config show' immediately after reads and displays the generated config with API keys redacted",
+    "MEMORY.md, SOUL.md, and AGENTS.md are created in the workspace directory",
+    "The wizard exits with code 0 and no unhandled errors"
+  ]
+}

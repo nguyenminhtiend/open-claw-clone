@@ -1,0 +1,11 @@
+{
+  "skill": "phase-06-auto-reply-pipeline",
+  "query": "Send a natural language message through the full 7-stage pipeline and verify it reaches the agent",
+  "expected_behavior": [
+    "All 7 pipeline stages execute in order: ingestion → authorization → debouncing → session resolution → command detection → agent dispatch → block streaming",
+    "Stage timing is logged for each stage with name and duration in milliseconds",
+    "The message is not incorrectly matched as a slash command at stage 5",
+    "The agent loop runs and produces a response",
+    "The response is delivered back to the source channel via block streaming (stage 7)"
+  ]
+}

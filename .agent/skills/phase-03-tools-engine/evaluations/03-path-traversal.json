@@ -1,0 +1,11 @@
+{
+  "skill": "phase-03-tools-engine",
+  "query": "A path traversal attempt using ../../etc/passwd should be blocked by the file tools",
+  "expected_behavior": [
+    "file_read with path '../../etc/passwd' is blocked before any filesystem access occurs",
+    "The tool returns a structured error stating the path is outside the workspace, not a generic OS error",
+    "The resolved absolute path is logged to aid debugging, but the file is NOT read",
+    "file_write with a traversal path is also blocked with the same mechanism",
+    "A legitimate path within the workspace (e.g. src/index.ts) is not blocked"
+  ]
+}

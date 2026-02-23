@@ -1,0 +1,11 @@
+{
+  "skill": "phase-07-plugin-system",
+  "query": "The daily-digest plugin should inject today's daily log into the session context on session:created",
+  "expected_behavior": [
+    "The daily-digest plugin registers a handler for the session:created hook event",
+    "When a new session is created, the hook fires and today's daily log content is read from memory/YYYY-MM-DD.md",
+    "The daily log is prepended to the session context before the first LLM call",
+    "If today's daily log does not exist yet, the hook silently skips injection with no error",
+    "Hooks from other plugins also fire for session:created without being suppressed"
+  ]
+}

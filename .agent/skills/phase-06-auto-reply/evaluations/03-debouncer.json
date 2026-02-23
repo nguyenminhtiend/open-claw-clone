@@ -1,0 +1,11 @@
+{
+  "skill": "phase-06-auto-reply-pipeline",
+  "query": "Three messages arrive from the same user within 200ms — they should be batched into one agent call",
+  "expected_behavior": [
+    "The debouncer at stage 3 detects all three messages share the same channelId:conversationId key",
+    "The pipeline waits for the full debounce window (300ms default) before proceeding",
+    "All three message contents are combined into a single string separated by newlines",
+    "Only one agent loop invocation occurs for the combined message",
+    "If more than 300ms elapses between messages, they are processed as separate pipeline runs"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "skill": "phase-05-channels-messaging",
+  "query": "A user not in the allowlist sends a DM to the bot — it should be rejected",
+  "expected_behavior": [
+    "The access control check runs before the message reaches the agent or pipeline",
+    "A user ID not present in the channel's allowedUsers list is blocked",
+    "The rejection is silent by default (no reply sent) or sends a configurable rejection message",
+    "The rejection is logged at warn level with the sender's user ID and channel ID",
+    "A user in the allowedUsers list can send messages normally through the same code path"
+  ]
+}

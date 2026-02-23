@@ -1,0 +1,11 @@
+{
+  "skill": "phase-01-foundation-gateway",
+  "query": "Set up the config system for the gateway — JSON5 loading with Zod validation and defaults",
+  "expected_behavior": [
+    "Creates packages/config/src/schema.ts with Zod schemas for gateway, agent, channel, plugin config",
+    "Creates packages/config/src/loader.ts that reads JSON5 files and merges config layers in order: defaults → global → workspace → env",
+    "Creates packages/config/src/defaults.ts with sensible default values",
+    "Config loaded from ~/.openclaw-clone/config.json5 and ./config.json5 correctly overrides defaults",
+    "Invalid config (bad Zod type) throws a descriptive validation error, not an unhandled crash"
+  ]
+}

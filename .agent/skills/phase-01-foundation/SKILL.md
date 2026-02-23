@@ -57,50 +57,11 @@ mkdir -p packages/{gateway,config,shared}/src
 
 ### 2. Create Base TypeScript Config
 
-Create `tsconfig.json` at the repo root:
-
-```json
-{
-  "compilerOptions": {
-    "target": "ES2022",
-    "module": "Node16",
-    "moduleResolution": "Node16",
-    "lib": ["ES2022"],
-    "strict": true,
-    "skipLibCheck": true,
-    "experimentalDecorators": false,
-    "emitDecoratorMetadata": false,
-    "outDir": "dist",
-    "declaration": true,
-    "sourceMap": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true
-  },
-  "exclude": ["node_modules", "dist"]
-}
-```
+Copy [configs/tsconfig.base.json](configs/tsconfig.base.json) to `tsconfig.json` at the repo root.
 
 ### 3. Create Biome Config
 
-Create `biome.json`:
-
-```json
-{
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-  "organizeImports": { "enabled": true },
-  "linter": {
-    "enabled": true,
-    "rules": { "recommended": true }
-  },
-  "formatter": {
-    "enabled": true,
-    "indentStyle": "tab"
-  }
-}
-```
+Copy [configs/biome.base.json](configs/biome.base.json) to `biome.json` at the repo root.
 
 ### 4. Install Root Dev Dependencies
 

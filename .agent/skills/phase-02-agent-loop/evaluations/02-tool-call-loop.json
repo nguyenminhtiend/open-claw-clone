@@ -1,0 +1,11 @@
+{
+  "skill": "phase-02-agent-loop",
+  "query": "The agent should make a tool call when the LLM requests it and feed the result back into the loop",
+  "expected_behavior": [
+    "When the LLM returns a tool_use content block, the agent loop detects it and calls the tool executor",
+    "The tool result is wrapped in a tool_result message and appended to the conversation history",
+    "The LLM is called again with the updated history, continuing the loop",
+    "The loop terminates correctly when the LLM returns stop_reason='end_turn' after receiving the tool result",
+    "The full exchange (user → LLM → tool_use → tool_result → LLM → text) is emitted as stream events to the WS client"
+  ]
+}

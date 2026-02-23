@@ -50,19 +50,7 @@ mkdir -p packages/cli/src/{commands/{config,sessions,memory,channels,plugins,dae
 
 ### 3. Build Core CLI Commands
 
-| Command                          | File                          | Description                                                           |
-| -------------------------------- | ----------------------------- | --------------------------------------------------------------------- |
-| `oclaw onboard`                  | `commands/onboard.ts`         | First-time setup wizard (provider, API key, model, config generation) |
-| `oclaw chat`                     | `commands/chat.ts`            | Interactive REPL with streaming responses                             |
-| `oclaw config show`              | `commands/config/show.ts`     | Display current config (API keys redacted)                            |
-| `oclaw config set`               | `commands/config/set.ts`      | Update config key-value                                               |
-| `oclaw sessions list`            | `commands/sessions/list.ts`   | Show active sessions                                                  |
-| `oclaw memory search`            | `commands/memory/search.ts`   | Semantic memory search                                                |
-| `oclaw memory status`            | `commands/memory/status.ts`   | Memory index health                                                   |
-| `oclaw channels status`          | `commands/channels/status.ts` | Connected channels                                                    |
-| `oclaw plugins list`             | `commands/plugins/list.ts`    | Installed plugins                                                     |
-| `oclaw daemon start/stop/status` | `commands/daemon/*.ts`        | Manage background service                                             |
-| `oclaw daemon install`           | `commands/daemon/install.ts`  | Install as launchd/systemd service                                    |
+Implement all commands listed in [reference/cli-commands.md](reference/cli-commands.md). All commands communicate with the Gateway via WebSocket JSON-RPC.
 
 ### 4. Build WebSocket Client
 
@@ -101,18 +89,7 @@ mkdir -p packages/web/src/{components,services,styles}
 
 ### 8. Build Web UI with Lit
 
-Lightweight web components (< 50KB bundle):
-
-| Component           | File                               | Purpose                       |
-| ------------------- | ---------------------------------- | ----------------------------- |
-| `oc-app`            | `src/app.ts`                       | Main app shell (nav + router) |
-| `oc-chat-view`      | `src/components/chat-view.ts`      | Chat interface with streaming |
-| `oc-session-list`   | `src/components/session-list.ts`   | Session browser               |
-| `oc-status-bar`     | `src/components/status-bar.ts`     | Gateway status dashboard      |
-| `oc-config-panel`   | `src/components/config-panel.ts`   | Config viewer                 |
-| `oc-message-bubble` | `src/components/message-bubble.ts` | Message display               |
-
-Dark mode by default with system-UI fonts.
+Lightweight web components (< 50KB bundle). Build all components listed in [reference/web-components.md](reference/web-components.md). Dark mode by default with system-UI fonts.
 
 ### 9. Serve Web UI from Gateway
 

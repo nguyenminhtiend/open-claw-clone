@@ -1,0 +1,11 @@
+{
+  "skill": "phase-07-plugin-system",
+  "query": "Load the cron-scheduler plugin and verify it registers its tool and starts its background service",
+  "expected_behavior": [
+    "The plugin loader discovers extensions/cron-scheduler/openclaw.plugin.json and validates the manifest",
+    "The plugin lifecycle fires in order: load → init → start with no errors",
+    "After start(), the schedule_task tool appears in the tool registry and is callable by the agent",
+    "The cron scheduler background service is running and its status is reported in gateway.status",
+    "Disabling the plugin in config prevents it from loading on next gateway start"
+  ]
+}

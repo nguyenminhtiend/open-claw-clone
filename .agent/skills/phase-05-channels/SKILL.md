@@ -42,13 +42,7 @@ mkdir -p packages/channels/src/{adapters,util}
 
 ### 2. Define Channel Interfaces
 
-`src/types.ts`:
-
-- `ChannelMessage` — Unified platform-agnostic message format (id, channelId, channelType, conversationId, senderId, content, attachments, timestamp, raw)
-- `ChannelAdapter` — Interface: `connect()`, `disconnect()`, `sendMessage()`, `editMessage()`, `deleteMessage()`, `onMessage`, `onError`
-- `OutboundMessage` — text, format, replyTo, attachments
-- `ChannelConfig` — enabled, dmPolicy (pairing/allowlist/open), allowedUsers, groupPolicy, rateLimit
-- `Attachment` — type (image/file/audio/video), url, data, mimeType, filename
+`src/types.ts` — See [reference/channel-interfaces.md](reference/channel-interfaces.md) for complete TypeScript definitions of all channel types (`ChannelMessage`, `ChannelAdapter`, `OutboundMessage`, `ChannelConfig`, `Attachment`).
 
 ### 3. Build Channel Manager
 

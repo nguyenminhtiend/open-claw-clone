@@ -1,0 +1,11 @@
+{
+  "skill": "phase-05-channels-messaging",
+  "query": "Set up the Telegram adapter so the bot can receive a user message and send a reply",
+  "expected_behavior": [
+    "The Telegram adapter connects using long polling and receives an incoming text message",
+    "The raw Telegram message is normalized into a ChannelMessage with all required fields populated",
+    "The ChannelManager routes the ChannelMessage to the pipeline or agent",
+    "After agent processing, the outbound reply is formatted as Telegram HTML (bold, italic, code spans)",
+    "The reply is sent via the Telegram Bot API and the message ID is returned"
+  ]
+}

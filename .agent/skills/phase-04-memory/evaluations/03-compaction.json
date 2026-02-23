@@ -1,0 +1,11 @@
+{
+  "skill": "phase-04-memory-persistence",
+  "query": "Context compaction should trigger when token usage reaches 80% of the context window limit",
+  "expected_behavior": [
+    "When the session's token count exceeds 80% of the configured max context, compaction is triggered automatically",
+    "The compaction engine calls the LLM to summarize older messages and extract durable facts",
+    "Extracted facts are appended to MEMORY.md under a timestamped heading",
+    "The current date's daily log gets a compaction entry noting what was summarized",
+    "After compaction, the session history is reduced to the most recent N messages plus the summary"
+  ]
+}

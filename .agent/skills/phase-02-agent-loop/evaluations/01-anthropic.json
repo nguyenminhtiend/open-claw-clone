@@ -1,0 +1,11 @@
+{
+  "skill": "phase-02-agent-loop",
+  "query": "Integrate the Anthropic Claude provider so the agent can call the API and return a response",
+  "expected_behavior": [
+    "Creates packages/agent/src/providers/anthropic.ts that implements the LlmProvider interface",
+    "The chat() method calls the Anthropic API and returns a ChatResponse with text content blocks",
+    "The chatStream() method returns an AsyncIterable that yields StreamChunk objects token by token",
+    "The countTokens() method returns an accurate token count using the Anthropic beta API",
+    "API key is read from config, not hardcoded; missing key throws a descriptive error"
+  ]
+}

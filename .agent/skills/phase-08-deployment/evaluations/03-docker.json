@@ -1,0 +1,11 @@
+{
+  "skill": "phase-08-cli-web-deployment",
+  "query": "Build the Docker image and verify the containerized gateway starts and passes health checks",
+  "expected_behavior": [
+    "docker build . completes without errors using the multi-stage Dockerfile",
+    "The final image runs as a non-root user (verify with 'docker run ... whoami')",
+    "The container starts and the Gateway listens on port 18789",
+    "GET http://localhost:18789/health returns HTTP 200 with a JSON status payload",
+    "The HEALTHCHECK instruction in the Dockerfile causes 'docker ps' to show status 'healthy' within 30 seconds"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "skill": "phase-04-memory-persistence",
+  "query": "Read MEMORY.md and SOUL.md so they are available in the agent's context",
+  "expected_behavior": [
+    "The memory_get tool reads MEMORY.md and returns its full contents",
+    "SOUL.md content is injected into the system prompt at context assembly time (not via tool call)",
+    "AGENTS.md is also injected into the system prompt alongside SOUL.md",
+    "USER.md is read and appended to the context with a clear section header",
+    "If MEMORY.md does not exist, the tool returns an empty string and creates the file gracefully"
+  ]
+}

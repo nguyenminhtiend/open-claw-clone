@@ -1,0 +1,11 @@
+{
+  "skill": "phase-08-cli-web-deployment",
+  "query": "Start oclaw chat and send a message — the response should stream token by token to stdout",
+  "expected_behavior": [
+    "oclaw chat connects to the Gateway via WebSocket at ws://localhost:18789",
+    "The user can type a message at the prompt and press Enter to send",
+    "The agent's response appears character-by-character (streaming) in the terminal as tokens arrive",
+    "Tool calls made by the agent are displayed inline with the tool name and a brief summary of the input",
+    "Typing /reset at the prompt clears the session and displays the confirmation"
+  ]
+}

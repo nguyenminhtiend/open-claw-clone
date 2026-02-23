@@ -1,0 +1,11 @@
+{
+  "skill": "phase-03-tools-engine",
+  "query": "The policy engine should block a tool that is on the deny list for the current agent",
+  "expected_behavior": [
+    "A tool on the agent's deny list is rejected before execution, without calling the handler",
+    "The policy engine returns a structured error result (not an exception/crash) to the agent loop",
+    "The deny rule wins over any allow rule when both match the same tool",
+    "A tool in a denied group (e.g. 'net') is also blocked even if not listed by name",
+    "An allowed tool not on the deny list executes normally without interference from the policy engine"
+  ]
+}

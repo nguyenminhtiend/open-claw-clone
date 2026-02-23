@@ -1,0 +1,11 @@
+{
+  "skill": "phase-07-plugin-system",
+  "query": "A plugin with a missing required field in its manifest should fail to load without crashing the gateway",
+  "expected_behavior": [
+    "The plugin loader reads the malformed openclaw.plugin.json and detects the missing required field",
+    "The validation error is logged at error level with the plugin path and the specific missing field",
+    "The plugin's status is set to 'error' in the registry — it does not appear as 'loaded'",
+    "The gateway continues starting up and all other valid plugins load normally",
+    "The plugins.list RPC method shows the failed plugin with its error status and reason"
+  ]
+}

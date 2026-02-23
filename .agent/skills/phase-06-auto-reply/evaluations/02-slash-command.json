@@ -1,0 +1,11 @@
+{
+  "skill": "phase-06-auto-reply-pipeline",
+  "query": "User sends /reset — the current session should be cleared and a confirmation sent",
+  "expected_behavior": [
+    "The /reset message is detected at stage 5 (command detection) and routed to the reset command handler",
+    "The pipeline sets ctx.responded = true so stage 6 (agent dispatch) is skipped",
+    "The current session's message history is cleared",
+    "A confirmation message (e.g. 'Session reset. Starting fresh.') is sent back to the channel",
+    "/new and /clear aliases also trigger the same reset behavior"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "skill": "phase-02-agent-loop",
+  "query": "Stream response tokens to a connected WebSocket client in real time",
+  "expected_behavior": [
+    "The WS client receives session.stream JSON-RPC notifications during the agent run",
+    "Notifications arrive with type='text' carrying individual token chunks in order",
+    "A type='tool_start' notification fires before tool execution with the tool name and input",
+    "A type='tool_result' notification fires after tool execution with the output",
+    "A final type='end' notification fires when the agent loop completes",
+    "No duplicate or out-of-order events appear even under concurrent sessions"
+  ]
+}

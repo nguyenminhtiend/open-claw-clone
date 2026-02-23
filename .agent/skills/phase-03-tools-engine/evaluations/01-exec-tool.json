@@ -1,0 +1,11 @@
+{
+  "skill": "phase-03-tools-engine",
+  "query": "Create the exec tool so the agent can run shell commands and capture their output",
+  "expected_behavior": [
+    "The exec tool runs a simple command (e.g. echo hello) and returns stdout, stderr, and exitCode",
+    "The tool times out after the configured duration (default 5 minutes) and returns an error",
+    "Standard error output is captured in the stderr field, not mixed into stdout",
+    "Background execution mode (when supported) returns immediately with a process handle",
+    "The tool result is truncated at configured max length (default 20KB) if output is excessive"
+  ]
+}

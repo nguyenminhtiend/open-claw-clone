@@ -1,0 +1,11 @@
+{
+  "skill": "phase-01-foundation-gateway",
+  "query": "Initialize the OpenClaw project from scratch — set up the monorepo structure",
+  "expected_behavior": [
+    "Creates pnpm-workspace.yaml at the repo root with 'packages/*' glob",
+    "Creates packages/gateway/src, packages/config/src, and packages/shared/src directories",
+    "Runs pnpm install successfully with no errors",
+    "Creates tsconfig.json at repo root by copying configs/tsconfig.base.json",
+    "Creates biome.json at repo root by copying configs/biome.base.json"
+  ]
+}
