@@ -1,6 +1,6 @@
 ---
 name: phase-07-plugin-system
-description: Builds the runtime plugin loader, lifecycle hooks, extension points, and example plugins (cron scheduler, daily digest) for the OpenClaw project. Use when implementing the plugin system, adding extension points, or creating new plugins after Phase 6 is complete.
+description: Builds the runtime plugin loader, lifecycle hooks, extension points, and example plugins (cron scheduler, daily digest). Use when implementing the plugin system, adding extension points, or creating new plugins after Phase 6 is complete.
 ---
 
 # Phase 7: Plugin System
@@ -32,9 +32,10 @@ Progress:
 
 ### 1. Create `packages/plugins`
 
-// turbo
+See [creating-package](../creating-package/SKILL.md) for the standard package scaffold.
 
 ```bash
+# turbo
 mkdir -p packages/plugins/src
 ```
 
@@ -115,9 +116,8 @@ Create `extensions/` directory at repo root:
 
 ### 9. Install Dependencies
 
-// turbo
-
 ```bash
+# turbo
 pnpm --filter @oclaw/plugins add jiti@^2 json5@^2
 ```
 

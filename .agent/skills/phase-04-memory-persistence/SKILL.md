@@ -1,6 +1,6 @@
 ---
 name: phase-04-memory-persistence
-description: Builds the Markdown-based memory system, vector search with embeddings, session persistence in SQLite, and context compaction for the OpenClaw project. Use when implementing the memory store, embedding pipeline, session persistence, or compaction logic after Phase 3 is complete.
+description: Builds the Markdown-based memory system, vector search with embeddings, session persistence in SQLite, and context compaction. Use when implementing the memory store, embedding pipeline, session persistence, or compaction logic after Phase 3 is complete.
 ---
 
 # Phase 4: Memory & Persistence
@@ -34,9 +34,10 @@ Progress:
 
 ### 1. Create `packages/memory`
 
-// turbo
+See [creating-package](../creating-package/SKILL.md) for the standard package scaffold.
 
 ```bash
+# turbo
 mkdir -p packages/memory/src/{vector,tools}
 ```
 
@@ -114,20 +115,20 @@ Triggers at configurable token threshold (default 80% of max context).
 
 ### 10. Install Dependencies
 
-// turbo
-
 ```bash
+# turbo
 pnpm --filter @oclaw/memory add better-sqlite3@^11
 pnpm --filter @oclaw/memory add -D @types/better-sqlite3
 ```
 
 ### 11. Write Tests
 
-// turbo
-
 ```bash
+# turbo
 pnpm --filter @oclaw/memory test
 ```
+
+See [testing-patterns](../testing-patterns/SKILL.md) for mock strategies.
 
 Key tests:
 

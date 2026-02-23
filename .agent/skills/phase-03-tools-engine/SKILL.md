@@ -1,6 +1,6 @@
 ---
 name: phase-03-tools-engine
-description: Builds the tool registry, execution pipeline, built-in tools (exec, file I/O, HTTP), and the 3-layer security policy engine for the OpenClaw project. Use when implementing tool calling, adding built-in tools, or configuring exec/sandbox policies after Phase 2 is complete.
+description: Builds the tool registry, execution pipeline, built-in tools (exec, file I/O, HTTP), and the 3-layer security policy engine. Use when implementing tool calling, adding built-in tools, or configuring exec/sandbox policies after Phase 2 is complete.
 ---
 
 # Phase 3: Tools Engine
@@ -32,9 +32,10 @@ Progress:
 
 ### 1. Create `packages/tools`
 
-// turbo
+See [creating-package](../creating-package/SKILL.md) for the standard package scaffold.
 
 ```bash
+# turbo
 mkdir -p packages/tools/src/{policy,built-in,schema}
 ```
 
@@ -110,20 +111,20 @@ mkdir -p packages/tools/src/{policy,built-in,schema}
 
 ### 9. Install Dependencies
 
-// turbo
-
 ```bash
+# turbo
 pnpm --filter @oclaw/tools add minimatch@^10 glob@^11 zod-to-json-schema@^3
 pnpm --filter @oclaw/tools add -D playwright@^1
 ```
 
 ### 10. Write Tests
 
-// turbo
-
 ```bash
+# turbo
 pnpm --filter @oclaw/tools test
 ```
+
+See [testing-patterns](../testing-patterns/SKILL.md) for mock strategies.
 
 Key tests:
 

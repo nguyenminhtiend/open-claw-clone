@@ -1,6 +1,6 @@
 ---
 name: phase-05-channels-messaging
-description: Builds the unified channel abstraction layer and Telegram, Discord, and WebChat adapters for the OpenClaw project. Use when implementing messaging channels, access control, message normalization, or platform-specific formatting after Phase 4 is complete.
+description: Builds the unified channel abstraction layer and Telegram, Discord, and WebChat adapters. Use when implementing messaging channels, access control, message normalization, or platform-specific formatting after Phase 4 is complete.
 ---
 
 # Phase 5: Channels & Messaging
@@ -34,9 +34,10 @@ Progress:
 
 ### 1. Create `packages/channels`
 
-// turbo
+See [creating-package](../creating-package/SKILL.md) for the standard package scaffold.
 
 ```bash
+# turbo
 mkdir -p packages/channels/src/{adapters,util}
 ```
 
@@ -111,13 +112,19 @@ Update Gateway boot sequence to:
 
 ### 10. Install Dependencies
 
-// turbo
-
 ```bash
+# turbo
 pnpm --filter @oclaw/channels add grammy@^1 discord.js@^14
 ```
 
 ### 11. Write Tests
+
+```bash
+# turbo
+pnpm --filter @oclaw/channels test
+```
+
+See [testing-patterns](../testing-patterns/SKILL.md) for mock strategies.
 
 Key tests:
 

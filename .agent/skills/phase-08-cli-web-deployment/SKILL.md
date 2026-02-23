@@ -1,6 +1,6 @@
 ---
 name: phase-08-cli-web-deployment
-description: Builds the CLI (onboard/chat/daemon commands), Lit-based web control panel, daemon service management, and Docker deployment for the OpenClaw project. Use when implementing the CLI entry point, web UI, daemon management, or packaging the system for deployment after all prior phases are complete.
+description: Builds the CLI (onboard/chat/daemon commands), Lit-based web control panel, daemon service management, and Docker deployment. Use when implementing the CLI entry point, web UI, daemon management, or packaging the system for deployment after all prior phases are complete.
 ---
 
 # Phase 8: CLI, Web UI & Deployment
@@ -35,9 +35,10 @@ Progress:
 
 ### 1. Create `packages/cli`
 
-// turbo
+See [creating-package](../creating-package/SKILL.md) for the standard package scaffold.
 
 ```bash
+# turbo
 mkdir -p packages/cli/src/{commands/{config,sessions,memory,channels,plugins,daemon},util}
 ```
 
@@ -81,9 +82,10 @@ Interactive prompts:
 
 ### 7. Create `packages/web`
 
-// turbo
+See [creating-package](../creating-package/SKILL.md) for the standard package scaffold.
 
 ```bash
+# turbo
 mkdir -p packages/web/src/{components,services,styles}
 ```
 
@@ -125,9 +127,8 @@ Add HTTP routes:
 
 ### 12. Install Dependencies
 
-// turbo
-
 ```bash
+# turbo
 pnpm --filter @oclaw/cli add citty @inquirer/prompts
 pnpm --filter @oclaw/web add lit
 ```

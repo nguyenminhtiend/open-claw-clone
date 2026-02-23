@@ -1,6 +1,6 @@
 ---
 name: phase-06-auto-reply-pipeline
-description: Builds the 7-stage message processing pipeline (ingestion → authorization → debouncing → session resolution → command detection → agent dispatch → block streaming) for the OpenClaw project. Use when implementing end-to-end message routing, slash commands, debouncing, or the pipeline runner after Phase 5 is complete.
+description: Builds the 7-stage message processing pipeline (ingestion → authorization → debouncing → session resolution → command detection → agent dispatch → block streaming). Use when implementing end-to-end message routing, slash commands, debouncing, or the pipeline runner after Phase 5 is complete.
 ---
 
 # Phase 6: Auto-Reply Pipeline
@@ -31,9 +31,10 @@ Progress:
 
 ### 1. Create `packages/pipeline`
 
-// turbo
+See [creating-package](../creating-package/SKILL.md) for the standard package scaffold.
 
 ```bash
+# turbo
 mkdir -p packages/pipeline/src/{stages,commands}
 ```
 
@@ -119,6 +120,11 @@ Key tests:
 
 **Feedback loop**: After implementing each stage (Step 4), write and run the test for that stage before implementing the next one. If a stage test fails, fix it before moving on — an incorrect earlier stage will corrupt all downstream stages. Only wire to the Gateway (Step 8) after all 7 stage tests pass.
 
+```bash
+# turbo
+pnpm --filter @oclaw/pipeline test
+```
+
 ---
 
 ## Checkpoint — You're Done When
@@ -131,3 +137,7 @@ Key tests:
 - [ ] Sessions resolved from conversation IDs
 - [ ] Agent dispatch runs full agent loop
 - [ ] Pipeline extensible with custom stages
+
+## Dependencies
+
+No new external packages — pipeline uses services from prior phases (`@oclaw/agent`, `@oclaw/channels`, `@oclaw/memory`).

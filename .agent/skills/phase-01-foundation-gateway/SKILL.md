@@ -1,6 +1,6 @@
 ---
 name: phase-01-foundation-gateway
-description: Scaffolds the pnpm monorepo, Zod/JSON5 config system, and WebSocket/HTTP gateway server for the OpenClaw project. Use when starting the project from scratch or when setting up the gateway, session manager, config loader, or shared packages.
+description: Scaffolds the pnpm monorepo, Zod/JSON5 config system, and WebSocket/HTTP gateway server. Use when starting the project from scratch or when setting up the gateway, session manager, config loader, or shared packages.
 ---
 
 # Phase 1: Foundation & Gateway
@@ -34,9 +34,8 @@ Progress:
 
 ### 1. Initialize Monorepo
 
-// turbo
-
 ```bash
+# turbo
 pnpm init
 ```
 
@@ -49,9 +48,8 @@ packages:
 
 Create package directories:
 
-// turbo
-
 ```bash
+# turbo
 mkdir -p packages/{gateway,config,shared}/src
 ```
 
@@ -65,13 +63,14 @@ Copy [configs/biome.base.json](configs/biome.base.json) to `biome.json` at the r
 
 ### 4. Install Root Dev Dependencies
 
-// turbo
-
 ```bash
+# turbo
 pnpm add -D typescript@^5.5 vitest@^2 @biomejs/biome@^1 tsup@^8 tsx@^4
 ```
 
 ### 5. Create `packages/shared`
+
+See [creating-package](../creating-package/SKILL.md) for the standard package scaffold. For the full type contracts (`JsonRpcRequest`, `Session`, `Message`, error codes, logger), see [shared-types-rpc](../shared-types-rpc/SKILL.md).
 
 Package for shared types, errors, and JSON-RPC protocol.
 
@@ -101,9 +100,8 @@ Config loads from:
 
 Install config dependencies:
 
-// turbo
-
 ```bash
+# turbo
 pnpm --filter @oclaw/config add zod@^3 json5@^2
 ```
 
@@ -133,9 +131,8 @@ Gateway boot sequence:
 
 Install gateway dependencies:
 
-// turbo
-
 ```bash
+# turbo
 pnpm --filter @oclaw/gateway add hono@^4 ws@^8 nanoid@^5 pino@^9
 pnpm --filter @oclaw/gateway add -D @types/ws
 ```
@@ -167,11 +164,12 @@ Connection interface: id, socket, role (cli/channel/web/node), auth state, capab
 
 ### 11. Write Tests
 
-// turbo
-
 ```bash
+# turbo
 pnpm --filter @oclaw/gateway test
 ```
+
+See [testing-patterns](../testing-patterns/SKILL.md) for mock strategies (WS connections, integration boot).
 
 Test files:
 

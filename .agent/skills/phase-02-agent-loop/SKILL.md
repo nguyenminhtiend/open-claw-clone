@@ -31,9 +31,10 @@ Progress:
 
 ### 1. Create `packages/agent`
 
-// turbo
+See [creating-package](../creating-package/SKILL.md) for the standard package scaffold.
 
 ```bash
+# turbo
 mkdir -p packages/agent/src/{providers,executor,tokens,streaming}
 ```
 
@@ -104,19 +105,19 @@ Update `session.send` RPC to trigger the agent loop:
 
 ### 8. Install Dependencies
 
-// turbo
-
 ```bash
+# turbo
 pnpm --filter @oclaw/agent add @anthropic-ai/sdk openai tiktoken
 ```
 
 ### 9. Write Tests
 
-// turbo
-
 ```bash
+# turbo
 pnpm --filter @oclaw/agent test
 ```
+
+See [testing-patterns](../testing-patterns/SKILL.md) for mock strategies.
 
 Key tests:
 
