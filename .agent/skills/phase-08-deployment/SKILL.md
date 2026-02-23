@@ -1,0 +1,190 @@
+---
+name: phase-08-cli-web-deployment
+description: Builds the CLI (onboard/chat/daemon commands), Lit-based web control panel, daemon service management, and Docker deployment for the OpenClaw project. Use when implementing the CLI entry point, web UI, daemon management, or packaging the system for deployment after all prior phases are complete.
+---
+
+# Phase 8: CLI, Web UI & Deployment
+
+Build the CLI entry point, web control panel, daemon service management, and Docker deployment.
+
+## Prerequisites
+
+- Phases 1-7 completed (full system working)
+- `citty` for CLI framework, `lit` for web UI
+
+## Steps
+
+Copy this checklist and mark off items as you complete them:
+
+```
+Progress:
+- [ ] 1. Create packages/cli
+- [ ] 2. Build CLI Framework
+- [ ] 3. Build Core CLI Commands
+- [ ] 4. Build WebSocket Client
+- [ ] 5. Build Onboard Wizard
+- [ ] 6. Build Chat REPL
+- [ ] 7. Create packages/web
+- [ ] 8. Build Web UI with Lit
+- [ ] 9. Serve Web UI from Gateway
+- [ ] 10. Build Daemon Management
+- [ ] 11. Build Docker Deployment
+- [ ] 12. Install Dependencies
+- [ ] 13. Write Tests ✅ all passing
+```
+
+### 1. Create `packages/cli`
+
+// turbo
+
+```bash
+mkdir -p packages/cli/src/{commands/{config,sessions,memory,channels,plugins,daemon},util}
+```
+
+### 2. Build CLI Framework
+
+`src/cli.ts` using **citty**:
+
+- Binary: `oclaw` with subcommand structure
+- All commands communicate with Gateway via WebSocket JSON-RPC
+
+### 3. Build Core CLI Commands
+
+| Command                          | File                          | Description                                                           |
+| -------------------------------- | ----------------------------- | --------------------------------------------------------------------- |
+| `oclaw onboard`                  | `commands/onboard.ts`         | First-time setup wizard (provider, API key, model, config generation) |
+| `oclaw chat`                     | `commands/chat.ts`            | Interactive REPL with streaming responses                             |
+| `oclaw config show`              | `commands/config/show.ts`     | Display current config (API keys redacted)                            |
+| `oclaw config set`               | `commands/config/set.ts`      | Update config key-value                                               |
+| `oclaw sessions list`            | `commands/sessions/list.ts`   | Show active sessions                                                  |
+| `oclaw memory search`            | `commands/memory/search.ts`   | Semantic memory search                                                |
+| `oclaw memory status`            | `commands/memory/status.ts`   | Memory index health                                                   |
+| `oclaw channels status`          | `commands/channels/status.ts` | Connected channels                                                    |
+| `oclaw plugins list`             | `commands/plugins/list.ts`    | Installed plugins                                                     |
+| `oclaw daemon start/stop/status` | `commands/daemon/*.ts`        | Manage background service                                             |
+| `oclaw daemon install`           | `commands/daemon/install.ts`  | Install as launchd/systemd service                                    |
+
+### 4. Build WebSocket Client
+
+`src/ws-client.ts`:
+
+- Connect to Gateway at `ws://localhost:18789`
+- JSON-RPC request/response helper
+- Event listener for notifications
+
+### 5. Build Onboard Wizard
+
+Interactive prompts:
+
+1. Choose LLM provider (Anthropic/OpenAI/Ollama/OpenRouter)
+2. Enter API key (skip for Ollama)
+3. Choose default model
+4. Generate `config.json5` at `~/.openclaw-clone/`
+5. Create initial memory files (MEMORY.md, SOUL.md, AGENTS.md)
+6. Optionally install daemon
+
+### 6. Build Chat REPL
+
+- Create/resume sessions
+- Stream responses token-by-token to stdout
+- Display tool calls inline
+- Support `/slash` commands
+- `readline` interface with prompt
+
+### 7. Create `packages/web`
+
+// turbo
+
+```bash
+mkdir -p packages/web/src/{components,services,styles}
+```
+
+### 8. Build Web UI with Lit
+
+Lightweight web components (< 50KB bundle):
+
+| Component           | File                               | Purpose                       |
+| ------------------- | ---------------------------------- | ----------------------------- |
+| `oc-app`            | `src/app.ts`                       | Main app shell (nav + router) |
+| `oc-chat-view`      | `src/components/chat-view.ts`      | Chat interface with streaming |
+| `oc-session-list`   | `src/components/session-list.ts`   | Session browser               |
+| `oc-status-bar`     | `src/components/status-bar.ts`     | Gateway status dashboard      |
+| `oc-config-panel`   | `src/components/config-panel.ts`   | Config viewer                 |
+| `oc-message-bubble` | `src/components/message-bubble.ts` | Message display               |
+
+Dark mode by default with system-UI fonts.
+
+### 9. Serve Web UI from Gateway
+
+Add HTTP routes:
+
+- `GET /` → serve `index.html`
+- `GET /assets/*` → serve static files from web package dist
+
+### 10. Build Daemon Management
+
+**macOS**: `launchd` plist at `~/Library/LaunchAgents/com.openclaw-clone.daemon.plist`
+
+- `RunAtLoad: true`, `KeepAlive: true`
+- Logs to `~/.openclaw-clone/logs/`
+
+**Linux**: `systemd` user service at `~/.config/systemd/user/openclaw-clone.service`
+
+- `Restart=always`, `RestartSec=10`
+
+### 11. Build Docker Deployment
+
+**Dockerfile** — Multi-stage build:
+
+- Stage 1: Install deps with pnpm
+- Stage 2: Runtime with Node.js 22, git, curl, ripgrep
+- Non-root user, HEALTHCHECK, volume for data
+
+**docker-compose.yml**:
+
+- Gateway service on port 18789
+- Optional Caddy reverse proxy for HTTPS
+- Persistent volumes for config and memory
+
+### 12. Install Dependencies
+
+// turbo
+
+```bash
+pnpm --filter @oclaw/cli add citty @inquirer/prompts
+pnpm --filter @oclaw/web add lit
+```
+
+### 13. Write Tests
+
+Key tests:
+
+- CLI commands connect to Gateway
+- Onboard wizard creates valid config
+- Chat REPL sends/receives via WebSocket
+- Docker image builds successfully
+- Web UI loads and connects
+
+**Feedback loop**: After `oclaw onboard` (Step 5), verify the generated `config.json5` loads cleanly by running `oclaw config show`. If the config is invalid, fix the wizard before building the Chat REPL. After building Docker (Step 11), run `docker build .` and verify the container starts and `GET /health` returns 200. Only finalize if the full end-to-end test passes: `oclaw chat` → Gateway → Agent → LLM → response.
+
+---
+
+## Checkpoint — You're Done When
+
+- [ ] `oclaw onboard` creates config, memory files, optional daemon
+- [ ] `oclaw chat` provides interactive REPL with streaming
+- [ ] `oclaw config show` displays current config
+- [ ] `oclaw sessions list` shows active sessions
+- [ ] `oclaw daemon start/stop/status` manages background service
+- [ ] Web UI at `http://localhost:18789` provides chat + dashboard
+- [ ] Docker build succeeds and container runs properly
+- [ ] Full end-to-end: CLI chat → Gateway → Agent → LLM → Response
+
+## Dependencies
+
+| Package                | Purpose                         |
+| ---------------------- | ------------------------------- |
+| citty                  | CLI framework                   |
+| @inquirer/prompts `^7` | Interactive prompts             |
+| lit `^3`               | Web components                  |
+| ink `^5`               | Terminal UI (optional TUI mode) |
