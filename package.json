@@ -1,0 +1,23 @@
+{
+  "name": "open-claw-clone",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm --filter @oclaw/gateway dev",
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "lint": "biome lint --write packages",
+    "format": "biome format --write packages",
+    "check": "biome check --write packages",
+    "ci:check": "biome ci ."
+  },
+  "packageManager": "pnpm@10.26.2",
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "tsup": "^8.5.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vitest": "^2.1.9"
+  }
+}
