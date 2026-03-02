@@ -1,0 +1,7 @@
+{
+  "id": "daily-digest",
+  "name": "Daily Digest",
+  "version": "1.0.0",
+  "description": "Injects today's daily log into new sessions as context",
+  "capabilities": ["hooks"]
+}

@@ -1,0 +1,24 @@
+{
+  "id": "cron-scheduler",
+  "name": "Cron Scheduler",
+  "version": "1.0.0",
+  "description": "Schedule recurring tasks using cron expressions",
+  "capabilities": ["tools", "services"],
+  "configSchema": {
+    "type": "object",
+    "properties": {
+      "jobs": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "cron": { "type": "string" },
+            "action": { "type": "string" }
+          },
+          "required": ["name", "cron", "action"]
+        }
+      }
+    }
+  }
+}

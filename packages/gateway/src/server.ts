@@ -13,6 +13,7 @@ import { loadConfig } from '@oclaw/config';
 import type { Config } from '@oclaw/config';
 import { createAutoReplyPipeline } from '@oclaw/pipeline';
 import type { PipelineContext } from '@oclaw/pipeline';
+import { type Plugin, type PluginSystem, createPluginSystem } from '@oclaw/plugins';
 import { UnauthorizedError, createLogger } from '@oclaw/shared';
 import { createHttpApp } from './http/app.js';
 import { startConfigWatcher } from './services/config-watcher.js';
@@ -29,6 +30,7 @@ export class Gateway {
   private connections!: ConnectionManager;
   private router!: RpcRouter;
   private channelManager!: ChannelManager;
+  private plugins!: PluginSystem;
   private nodeServer?: ReturnType<typeof createServer>;
   private configWatcher?: FSWatcher | null;
   private workspaceDir: string;
@@ -77,7 +79,16 @@ export class Gateway {
     // 7. Boot channel adapters
     await this.bootChannels(this.config);
 
-    // 8. Listen
+    // 8. Load plugins
+    this.plugins = createPluginSystem({
+      config: this.config,
+      logger,
+      sessions: this.sessions,
+    });
+    await this.plugins.loadAll(this.config);
+    await this.plugins.hooks.emit('gateway:startup', {});
+
+    // 9. Listen
     await new Promise<void>((resolve) => {
       this.nodeServer?.listen(this.config.gateway.port, this.config.gateway.host, () => {
         logger.info(`Gateway listening on ${this.config.gateway.host}:${this.config.gateway.port}`);
@@ -97,7 +108,7 @@ export class Gateway {
       },
       sendToConnection(connId, method, params) {
         const conn = self.connections.get(connId);
-        if (conn?.socket.readyState === conn?.socket.OPEN) {
+        if (conn && conn.socket.readyState === conn.socket.OPEN) {
           conn.socket.send(JSON.stringify({ jsonrpc: '2.0', method, params }));
         }
       },
@@ -252,6 +263,18 @@ export class Gateway {
       };
     });
 
+    this.router.register('plugins.list', () => {
+      return (
+        this.plugins?.listPlugins().map((p: Plugin) => ({
+          id: p.manifest.id,
+          name: p.manifest.name,
+          version: p.manifest.version,
+          status: p.status,
+          capabilities: p.manifest.capabilities,
+        })) ?? []
+      );
+    });
+
     this.router.register('auth.login', (params, ctx) => {
       if (!ctx.config.gateway.auth.enabled) {
         return { authenticated: true };
@@ -267,6 +290,10 @@ export class Gateway {
 
   async shutdown(): Promise<void> {
     this.configWatcher?.close();
+    if (this.plugins) {
+      await this.plugins.hooks.emit('gateway:shutdown', {});
+      await this.plugins.stopAll();
+    }
     await this.channelManager?.shutdown();
     for (const conn of this.connections.list()) {
       conn.socket.close();
