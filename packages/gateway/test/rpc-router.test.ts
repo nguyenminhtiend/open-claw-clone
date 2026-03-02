@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach, } from 'vitest'
 import { RpcRouter } from '../src/ws/rpc-router.js'
 import { SessionManager } from '../src/sessions/manager.js'
 import { RpcErrorCode, RpcError } from '@oclaw/shared'

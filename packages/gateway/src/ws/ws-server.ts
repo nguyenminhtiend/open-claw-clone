@@ -1,10 +1,10 @@
-import { IncomingMessage, type Server } from 'node:http'
+import type { Server } from 'node:http'
 import { WebSocketServer } from 'ws'
 import type WebSocket from 'ws'
 import { type Logger, RpcErrorCode, isJsonRpcRequest } from '@oclaw/shared'
 import type { Config } from '@oclaw/config'
 import { UnauthorizedError } from '@oclaw/shared'
-import type { ConnectionManager, WsConnection } from './connection.js'
+import type { ConnectionManager, } from './connection.js'
 import type { RpcRouter } from './rpc-router.js'
 import type { SessionManager } from '../sessions/manager.js'
 
