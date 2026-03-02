@@ -1,6 +1,6 @@
-import { describe, it, expect, beforeEach } from 'vitest'
-import { SessionManager } from '../src/sessions/manager.js'
 import { SessionNotFoundError } from '@oclaw/shared'
+import { beforeEach, describe, expect, it } from 'vitest'
+import { SessionManager } from '../src/sessions/manager.js'
 
 describe('SessionManager', () => {
 	let manager: SessionManager

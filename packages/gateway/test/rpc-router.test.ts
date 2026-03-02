@@ -1,9 +1,9 @@
-import { describe, it, expect, beforeEach, } from 'vitest'
-import { RpcRouter } from '../src/ws/rpc-router.js'
-import { SessionManager } from '../src/sessions/manager.js'
-import { RpcErrorCode, RpcError } from '@oclaw/shared'
 import { defaults } from '@oclaw/config'
+import { RpcError, RpcErrorCode } from '@oclaw/shared'
+import { beforeEach, describe, expect, it } from 'vitest'
+import { SessionManager } from '../src/sessions/manager.js'
 import type { WsConnection } from '../src/ws/connection.js'
+import { RpcRouter } from '../src/ws/rpc-router.js'
 
 const mockConn = {
 	id: 'test-conn',

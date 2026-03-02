@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import WebSocket from 'ws'
 import { Gateway } from '../../src/server.js'
 
@@ -8,9 +8,9 @@ let port: number
 describe('Gateway integration', () => {
 	beforeEach(async () => {
 		gateway = new Gateway()
-		process.env['OCLAW_PORT'] = '0'
+		process.env.OCLAW_PORT = '0'
 		await gateway.boot()
-		delete process.env['OCLAW_PORT']
+		process.env.OCLAW_PORT = undefined
 		port = gateway.getAddress()?.port ?? 18789
 	})
 
@@ -40,7 +40,7 @@ describe('Gateway integration', () => {
 
 	it('responds to gateway.status', async () => {
 		const ws = await connect()
-		const result = await rpc(ws, 'gateway.status') as { status: string }
+		const result = (await rpc(ws, 'gateway.status')) as { status: string }
 		expect(result.status).toBe('ok')
 		ws.close()
 	})
@@ -48,26 +48,26 @@ describe('Gateway integration', () => {
 	it('creates and lists sessions', async () => {
 		const ws = await connect()
 		await rpc(ws, 'session.create', { channelId: 'test' })
-		const list = await rpc(ws, 'session.list') as unknown[]
+		const list = (await rpc(ws, 'session.list')) as unknown[]
 		expect(list).toHaveLength(1)
 		ws.close()
 	})
 
 	it('gets a session by id', async () => {
 		const ws = await connect()
-		const created = await rpc(ws, 'session.create') as { id: string }
-		const fetched = await rpc(ws, 'session.get', { id: created.id }) as { id: string }
+		const created = (await rpc(ws, 'session.create')) as { id: string }
+		const fetched = (await rpc(ws, 'session.get', { id: created.id })) as { id: string }
 		expect(fetched.id).toBe(created.id)
 		ws.close()
 	})
 
 	it('sends a message to a session', async () => {
 		const ws = await connect()
-		const session = await rpc(ws, 'session.create') as { id: string }
-		const res = await rpc(ws, 'session.send', {
+		const session = (await rpc(ws, 'session.create')) as { id: string }
+		const res = (await rpc(ws, 'session.send', {
 			sessionId: session.id,
 			content: 'hello world',
-		}) as { message: { content: string }; queued: boolean }
+		})) as { message: { content: string }; queued: boolean }
 		expect(res.message.content).toBe('hello world')
 		expect(res.queued).toBe(true)
 		ws.close()

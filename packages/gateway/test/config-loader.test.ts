@@ -1,8 +1,8 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
 import { loadConfig } from '@oclaw/config'
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 describe('loadConfig', () => {
 	let tmpDir: string
@@ -23,22 +23,20 @@ describe('loadConfig', () => {
 	})
 
 	it('merges workspace config over defaults', () => {
-		fs.writeFileSync(
-			path.join(tmpDir, 'config.json5'),
-			JSON.stringify({ gateway: { port: 9999 } }),
-		)
+		fs.writeFileSync(path.join(tmpDir, 'config.json5'), JSON.stringify({ gateway: { port: 9999 } }))
 		const config = loadConfig(tmpDir)
 		expect(config.gateway.port).toBe(9999)
 		expect(config.gateway.host).toBe('127.0.0.1')
 	})
 
 	it('applies env var overrides', () => {
-		process.env['OCLAW_PORT'] = '7777'
+		process.env.OCLAW_PORT = '7777'
 		try {
 			const config = loadConfig(tmpDir)
 			expect(config.gateway.port).toBe(7777)
 		} finally {
-			delete process.env['OCLAW_PORT']
+			// biome-ignore lint/performance/noDelete: required to fully remove env var
+			delete process.env.OCLAW_PORT
 		}
 	})
 

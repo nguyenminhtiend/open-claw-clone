@@ -27,7 +27,7 @@ mkdir -p packages/<name>/src
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsup",
-    "test": "vitest run",
+    "test": "vitest run --passWithNoTests",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "lint": "biome lint --write src",
@@ -53,7 +53,7 @@ mkdir -p packages/<name>/src
 ### `packages/<name>/tsup.config.ts`
 
 ```typescript
-import { defineConfig } from 'tsup'
+import { defineConfig } from 'tsup';
 
 export default defineConfig({
   entry: ['src/index.ts'],
@@ -61,19 +61,19 @@ export default defineConfig({
   dts: true,
   clean: true,
   sourcemap: true,
-})
+});
 ```
 
 ### `packages/<name>/vitest.config.ts`
 
 ```typescript
-import { defineConfig } from 'vitest/config'
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
     environment: 'node',
   },
-})
+});
 ```
 
 ### `packages/<name>/biome.json`
@@ -91,7 +91,7 @@ Each package extends the root config. Only create this file if the package needs
 Start with empty exports; fill in as you implement.
 
 ```typescript
-export {}
+export {};
 ```
 
 ## Adding to Workspace

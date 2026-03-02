@@ -1,15 +1,15 @@
-import { createServer } from 'node:http'
 import type { FSWatcher } from 'node:fs'
+import { createServer } from 'node:http'
 import { getRequestListener } from '@hono/node-server'
 import { loadConfig } from '@oclaw/config'
 import type { Config } from '@oclaw/config'
 import { UnauthorizedError, createLogger } from '@oclaw/shared'
+import { createHttpApp } from './http/app.js'
+import { startConfigWatcher } from './services/config-watcher.js'
+import { SessionManager } from './sessions/manager.js'
 import { ConnectionManager } from './ws/connection.js'
 import { RpcRouter } from './ws/rpc-router.js'
 import { createWsServer } from './ws/ws-server.js'
-import { SessionManager } from './sessions/manager.js'
-import { createHttpApp } from './http/app.js'
-import { startConfigWatcher } from './services/config-watcher.js'
 
 const logger = createLogger('gateway')
 
@@ -65,22 +65,19 @@ export class Gateway {
 
 		// 7. Listen
 		await new Promise<void>((resolve) => {
-			this.nodeServer!.listen(this.config.gateway.port, this.config.gateway.host, () => {
-				logger.info(
-					`Gateway listening on ${this.config.gateway.host}:${this.config.gateway.port}`,
-				)
+			this.nodeServer?.listen(this.config.gateway.port, this.config.gateway.host, () => {
+				logger.info(`Gateway listening on ${this.config.gateway.host}:${this.config.gateway.port}`)
 				resolve()
 			})
 		})
-
 	}
 
 	private registerRpcMethods(): void {
 		this.router.register('session.create', (params, ctx) => {
 			return ctx.sessions.create({
-				channelId: params?.['channelId'] as string | undefined,
-				agentId: params?.['agentId'] as string | undefined,
-				metadata: params?.['metadata'] as Record<string, unknown> | undefined,
+				channelId: params?.channelId as string | undefined,
+				agentId: params?.agentId as string | undefined,
+				metadata: params?.metadata as Record<string, unknown> | undefined,
 			})
 		})
 
@@ -89,14 +86,14 @@ export class Gateway {
 		})
 
 		this.router.register('session.get', (params, ctx) => {
-			const id = params?.['id'] as string
+			const id = params?.id as string
 			return ctx.sessions.get(id)
 		})
 
 		// stub for Phase 2
 		this.router.register('session.send', (params, ctx) => {
-			const sessionId = params?.['sessionId'] as string
-			const content = params?.['content'] as string
+			const sessionId = params?.sessionId as string
+			const content = params?.content as string
 			const message = ctx.sessions.addMessage(sessionId, 'user', content)
 			return { message, queued: true }
 		})
@@ -132,7 +129,7 @@ export class Gateway {
 			if (!ctx.config.gateway.auth.enabled) {
 				return { authenticated: true }
 			}
-			const token = params?.['token'] as string | undefined
+			const token = params?.token as string | undefined
 			if (!token || token !== ctx.config.gateway.auth.token) {
 				throw new UnauthorizedError('Invalid token')
 			}

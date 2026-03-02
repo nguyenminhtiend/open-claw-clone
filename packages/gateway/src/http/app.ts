@@ -1,7 +1,7 @@
-import { Hono } from 'hono'
 import type { Config } from '@oclaw/config'
-import type { ConnectionManager } from '../ws/connection.js'
+import { Hono } from 'hono'
 import type { SessionManager } from '../sessions/manager.js'
+import type { ConnectionManager } from '../ws/connection.js'
 import { healthRoutes } from './routes/health.js'
 import { sessionRoutes } from './routes/sessions.js'
 

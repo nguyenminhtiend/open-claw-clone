@@ -1,8 +1,8 @@
+import type { Config } from '@oclaw/config'
 import type { JsonRpcRequest, JsonRpcResponse } from '@oclaw/shared'
 import { RpcError, RpcErrorCode } from '@oclaw/shared'
-import type { WsConnection } from './connection.js'
 import type { SessionManager } from '../sessions/manager.js'
-import type { Config } from '@oclaw/config'
+import type { WsConnection } from './connection.js'
 
 export interface RpcContext {
 	conn: WsConnection

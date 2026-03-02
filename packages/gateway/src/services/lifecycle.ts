@@ -1,9 +1,6 @@
 import type { Logger } from '@oclaw/shared'
 
-export function setupGracefulShutdown(
-	logger: Logger,
-	shutdown: () => Promise<void>,
-): void {
+export function setupGracefulShutdown(logger: Logger, shutdown: () => Promise<void>): void {
 	const handle = async (signal: string) => {
 		logger.info({ signal }, 'Shutting down...')
 		try {

@@ -1,6 +1,6 @@
-import type WebSocket from 'ws'
 import type { Connection } from '@oclaw/shared'
 import { nanoid } from '@oclaw/shared'
+import type WebSocket from 'ws'
 
 export interface WsConnection extends Connection {
 	socket: WebSocket

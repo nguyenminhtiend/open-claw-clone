@@ -1,9 +1,9 @@
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
+import { ConfigError } from '@oclaw/shared'
 import JSON5 from 'json5'
 import { type ZodError, z } from 'zod'
-import { ConfigError } from '@oclaw/shared'
 import { defaults } from './defaults.js'
 import { type Config, configSchema } from './schema.js'
 
@@ -43,22 +43,22 @@ function readJson5File(filePath: string): DeepPartial<Config> | null {
 function applyEnvOverrides(config: Config): Config {
 	const result = deepMerge(config, {})
 
-	if (process.env['OCLAW_PORT']) {
-		result.gateway.port = Number(process.env['OCLAW_PORT'])
+	if (process.env.OCLAW_PORT) {
+		result.gateway.port = Number(process.env.OCLAW_PORT)
 	}
-	if (process.env['OCLAW_HOST']) {
-		result.gateway.host = process.env['OCLAW_HOST']
+	if (process.env.OCLAW_HOST) {
+		result.gateway.host = process.env.OCLAW_HOST
 	}
-	if (process.env['OCLAW_AUTH_TOKEN']) {
-		result.gateway.auth.token = process.env['OCLAW_AUTH_TOKEN']
+	if (process.env.OCLAW_AUTH_TOKEN) {
+		result.gateway.auth.token = process.env.OCLAW_AUTH_TOKEN
 		result.gateway.auth.enabled = true
 	}
-	if (process.env['ANTHROPIC_API_KEY']) {
-		result.agents.defaults.provider.apiKey = process.env['ANTHROPIC_API_KEY']
+	if (process.env.ANTHROPIC_API_KEY) {
+		result.agents.defaults.provider.apiKey = process.env.ANTHROPIC_API_KEY
 	}
-	if (process.env['OPENAI_API_KEY']) {
+	if (process.env.OPENAI_API_KEY) {
 		if (result.agents.defaults.provider.name === 'openai') {
-			result.agents.defaults.provider.apiKey = process.env['OPENAI_API_KEY']
+			result.agents.defaults.provider.apiKey = process.env.OPENAI_API_KEY
 		}
 	}
 
