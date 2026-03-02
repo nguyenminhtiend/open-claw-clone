@@ -2,6 +2,13 @@ import type { FSWatcher } from 'node:fs';
 import { createServer } from 'node:http';
 import { getRequestListener } from '@hono/node-server';
 import { ProviderRegistry, StreamingAgentLoop } from '@oclaw/agent';
+import {
+  ChannelManager,
+  DiscordAdapter,
+  TelegramAdapter,
+  WebChatAdapter,
+  type WebChatGateway,
+} from '@oclaw/channels';
 import { loadConfig } from '@oclaw/config';
 import type { Config } from '@oclaw/config';
 import { UnauthorizedError, createLogger } from '@oclaw/shared';
@@ -19,6 +26,7 @@ export class Gateway {
   private sessions!: SessionManager;
   private connections!: ConnectionManager;
   private router!: RpcRouter;
+  private channelManager!: ChannelManager;
   private nodeServer?: ReturnType<typeof createServer>;
   private configWatcher?: FSWatcher | null;
   private workspaceDir: string;
@@ -64,13 +72,78 @@ export class Gateway {
       },
     });
 
-    // 7. Listen
+    // 7. Boot channel adapters
+    await this.bootChannels(this.config);
+
+    // 8. Listen
     await new Promise<void>((resolve) => {
       this.nodeServer?.listen(this.config.gateway.port, this.config.gateway.host, () => {
         logger.info(`Gateway listening on ${this.config.gateway.host}:${this.config.gateway.port}`);
         resolve();
       });
     });
+  }
+
+  private async bootChannels(config: Config): Promise<void> {
+    const self = this;
+
+    const webchatGateway: WebChatGateway = {
+      registerRpc(method, handler) {
+        self.router.register(method, (params, ctx) =>
+          handler(params ?? {}, { connId: ctx.conn.id })
+        );
+      },
+      sendToConnection(connId, method, params) {
+        const conn = self.connections.get(connId);
+        if (conn?.socket.readyState === conn?.socket.OPEN) {
+          conn.socket.send(JSON.stringify({ jsonrpc: '2.0', method, params }));
+        }
+      },
+    };
+
+    this.channelManager = new ChannelManager(async (msg) => {
+      const session = this.sessions.getOrCreate(msg.conversationId, msg.channelId);
+      const provider = ProviderRegistry.fromConfig(config.agents.defaults.provider);
+      const agent = new StreamingAgentLoop(provider, config.agents.defaults);
+
+      agent.on('stream:end', async () => {
+        const lastMsg = session.messages.findLast((m) => m.role === 'assistant');
+        if (lastMsg && typeof lastMsg.content === 'string') {
+          await this.channelManager.sendToChannel(msg.channelId, msg.conversationId, {
+            text: lastMsg.content,
+            format: 'markdown',
+          });
+        }
+      });
+
+      await agent.runStreaming(this.sessions, session.id, msg.content);
+    });
+
+    // WebChat is always registered
+    await this.channelManager.registerChannel(new WebChatAdapter(webchatGateway), {
+      enabled: true,
+      dmPolicy: 'open',
+    });
+
+    if (config.channels.telegram?.token) {
+      await this.channelManager.registerChannel(
+        new TelegramAdapter({
+          token: config.channels.telegram.token,
+          channelConfig: config.channels.telegram,
+        }),
+        config.channels.telegram
+      );
+    }
+
+    if (config.channels.discord?.token) {
+      await this.channelManager.registerChannel(
+        new DiscordAdapter({
+          token: config.channels.discord.token,
+          channelConfig: config.channels.discord,
+        }),
+        config.channels.discord
+      );
+    }
   }
 
   private registerRpcMethods(): void {
@@ -158,6 +231,7 @@ export class Gateway {
         uptime: process.uptime(),
         connections: this.connections.size(),
         sessions: ctx.sessions.size(),
+        channels: this.channelManager?.getStatus() ?? {},
         version: '0.1.0',
       };
     });
@@ -194,6 +268,7 @@ export class Gateway {
 
   async shutdown(): Promise<void> {
     this.configWatcher?.close();
+    await this.channelManager?.shutdown();
     for (const conn of this.connections.list()) {
       conn.socket.close();
     }

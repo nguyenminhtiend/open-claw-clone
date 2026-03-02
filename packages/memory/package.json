@@ -1,14 +1,19 @@
 {
-  "name": "@oclaw/gateway",
+  "name": "@oclaw/memory",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "scripts": {
-    "dev": "tsx watch src/index.ts",
     "build": "tsup",
-    "test": "vitest run",
+    "test": "vitest run --passWithNoTests",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "lint": "biome lint --write src",
@@ -16,17 +21,17 @@
     "check": "biome check --write src"
   },
   "dependencies": {
-    "@hono/node-server": "^1.19.9",
     "@oclaw/agent": "workspace:*",
-    "@oclaw/channels": "workspace:*",
     "@oclaw/config": "workspace:*",
     "@oclaw/shared": "workspace:*",
-    "hono": "^4.12.3",
-    "nanoid": "^5.1.6",
-    "pino": "^9.14.0",
-    "ws": "^8.19.0"
+    "@oclaw/tools": "workspace:*",
+    "better-sqlite3": "^11.0.0",
+    "glob": "^11.0.0",
+    "nanoid": "^5.0.0",
+    "zod": "^3.24.0"
   },
   "devDependencies": {
-    "@types/ws": "^8.18.1"
+    "@types/better-sqlite3": "^7.6.0",
+    "@types/node": "^22.0.0"
   }
 }

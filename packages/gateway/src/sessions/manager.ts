@@ -71,6 +71,27 @@ export class SessionManager {
     return message;
   }
 
+  /**
+   * Find an existing session by channelId+conversationId, or create a new one.
+   * conversationId is stored in metadata.conversationId for lookup.
+   */
+  getOrCreate(conversationId: string, channelId: string): Session {
+    const existing = this.store
+      .list()
+      .find(
+        (s) =>
+          s.channelId === channelId &&
+          (s.metadata as Record<string, unknown>).conversationId === conversationId
+      );
+    if (existing) {
+      return existing;
+    }
+    return this.create({
+      channelId,
+      metadata: { conversationId },
+    });
+  }
+
   size(): number {
     return this.store.size();
   }
