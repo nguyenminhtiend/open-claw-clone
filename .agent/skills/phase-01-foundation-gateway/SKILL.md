@@ -61,6 +61,8 @@ Copy [configs/tsconfig.base.json](configs/tsconfig.base.json) to `tsconfig.json`
 
 Copy [configs/biome.base.json](configs/biome.base.json) to `biome.json` at the repo root.
 
+See [biome-setup](../biome-setup/SKILL.md) for full config reference, editor integration, and CI usage.
+
 ### 4. Install Root Dev Dependencies
 
 ```bash

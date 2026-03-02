@@ -29,7 +29,10 @@ mkdir -p packages/<name>/src
     "build": "tsup",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "biome lint --write src",
+    "format": "biome format --write src",
+    "check": "biome check --write src"
   }
 }
 ```
@@ -73,6 +76,16 @@ export default defineConfig({
 })
 ```
 
+### `packages/<name>/biome.json`
+
+Each package extends the root config. Only create this file if the package needs different rules.
+
+```json
+{
+  "extends": ["../../biome.json"]
+}
+```
+
 ### `packages/<name>/src/index.ts`
 
 Start with empty exports; fill in as you implement.
@@ -95,3 +108,5 @@ pnpm --filter @oclaw/<consumer> add @oclaw/<name>@workspace:*
 - Always use `"type": "module"` — the project is fully ESM
 - `tsup` outputs to `dist/`; never import `src/` from other packages
 - Add `@oclaw/shared` as a dependency if the package uses shared types or the logger: `pnpm --filter @oclaw/<name> add @oclaw/shared@workspace:*`
+- Run `pnpm check` before committing — it runs lint + format + import organization in one pass
+- See [biome-setup](../biome-setup/SKILL.md) for full config reference and editor integration

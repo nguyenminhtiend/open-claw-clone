@@ -44,11 +44,11 @@ Define the `LlmProvider` interface in `src/providers/types.ts`:
 
 ```typescript
 interface LlmProvider {
-  id: string;
-  name: string;
-  chat(request: ChatRequest): Promise<ChatResponse>;
-  chatStream(request: ChatRequest): AsyncIterable<StreamChunk>;
-  countTokens(messages: Message[]): Promise<number>;
+  id: string
+  name: string
+  chat(request: ChatRequest): Promise<ChatResponse>
+  chatStream(request: ChatRequest): AsyncIterable<StreamChunk>
+  countTokens(messages: Message[]): Promise<number>
 }
 ```
 

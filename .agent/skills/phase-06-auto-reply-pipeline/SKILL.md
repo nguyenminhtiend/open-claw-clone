@@ -100,8 +100,8 @@ In Block Streaming stage:
 Replace direct channel → agent routing with pipeline:
 
 ```typescript
-const pipeline = createAutoReplyPipeline(services);
-channelManager.onMessage = (msg) => pipeline.run({ message: msg, services });
+const pipeline = createAutoReplyPipeline(services)
+channelManager.onMessage = (msg) => pipeline.run({ message: msg, services })
 ```
 
 ### 9. Write Tests

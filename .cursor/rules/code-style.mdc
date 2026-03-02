@@ -1,0 +1,59 @@
+---
+description: TypeScript/JavaScript code style enforced by Biome. Always follow these conventions when writing or editing TS/JS code.
+globs: **/*.ts,**/*.tsx,**/*.js,**/*.mjs
+alwaysApply: false
+---
+
+# Code Style (Biome)
+
+## Formatting
+
+- **Indent with tabs**, not spaces
+- **Single quotes** for strings: `'hello'` not `"hello"`
+- **No semicolons** at the end of statements (ASI handles it)
+- **Trailing commas** everywhere (arrays, objects, function params)
+- Line width: 100 chars
+
+## Imports
+
+Always use `import type` for type-only imports:
+
+```typescript
+// ✅
+import type { Session } from '@oclaw/shared'
+import { createLogger } from '@oclaw/shared'
+
+// ❌
+import { Session, createLogger } from '@oclaw/shared'
+```
+
+## No Unused Symbols
+
+Never leave unused imports or variables. Remove them immediately.
+
+## Quick Reference
+
+```typescript
+// ✅ correct
+import type { Foo } from './types'
+import { bar } from './utils'
+
+const greet = (name: string) => {
+	const msg = `Hello, ${name}`
+	return msg
+}
+
+const items = [
+	'one',
+	'two',
+	'three',
+]
+
+// ❌ wrong — double quotes, semicolons, spaces for indent, missing trailing comma
+import { Foo } from "./types";
+
+const greet = (name: string) => {
+  const msg = `Hello, ${name}`;
+  return msg;
+};
+```
