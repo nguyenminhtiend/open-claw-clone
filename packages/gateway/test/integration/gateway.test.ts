@@ -29,11 +29,17 @@ describe('Gateway integration', () => {
 	function rpc(ws: WebSocket, method: string, params?: Record<string, unknown>): Promise<unknown> {
 		return new Promise((resolve, reject) => {
 			const id = Math.random().toString(36).slice(2)
-			ws.once('message', (data) => {
-				const res = JSON.parse(data.toString())
-				if (res.error) reject(new Error(res.error.message))
-				else resolve(res.result)
-			})
+
+			const onMessage = (data: WebSocket.RawData) => {
+				const msg = JSON.parse(data.toString())
+				// Ignore notifications (no id) and responses for other requests
+				if (msg.id !== id) return
+				ws.off('message', onMessage)
+				if (msg.error) reject(new Error(msg.error.message))
+				else resolve(msg.result)
+			}
+
+			ws.on('message', onMessage)
 			ws.send(JSON.stringify({ jsonrpc: '2.0', id, method, params }))
 		})
 	}
@@ -61,15 +67,14 @@ describe('Gateway integration', () => {
 		ws.close()
 	})
 
-	it('sends a message to a session', async () => {
+	it('sends a message to a session and returns ok', async () => {
 		const ws = await connect()
 		const session = (await rpc(ws, 'session.create')) as { id: string }
 		const res = (await rpc(ws, 'session.send', {
 			sessionId: session.id,
 			content: 'hello world',
-		})) as { message: { content: string }; queued: boolean }
-		expect(res.message.content).toBe('hello world')
-		expect(res.queued).toBe(true)
+		})) as { ok: boolean }
+		expect(res.ok).toBe(true)
 		ws.close()
 	})
 

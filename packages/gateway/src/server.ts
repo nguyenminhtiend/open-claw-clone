@@ -1,6 +1,7 @@
 import type { FSWatcher } from 'node:fs'
 import { createServer } from 'node:http'
 import { getRequestListener } from '@hono/node-server'
+import { ProviderRegistry, StreamingAgentLoop } from '@oclaw/agent'
 import { loadConfig } from '@oclaw/config'
 import type { Config } from '@oclaw/config'
 import { UnauthorizedError, createLogger } from '@oclaw/shared'
@@ -90,12 +91,65 @@ export class Gateway {
 			return ctx.sessions.get(id)
 		})
 
-		// stub for Phase 2
-		this.router.register('session.send', (params, ctx) => {
+		this.router.register('session.send', async (params, ctx) => {
 			const sessionId = params?.sessionId as string
 			const content = params?.content as string
-			const message = ctx.sessions.addMessage(sessionId, 'user', content)
-			return { message, queued: true }
+
+			const provider = ProviderRegistry.fromConfig(ctx.config.agents.defaults.provider)
+			const agent = new StreamingAgentLoop(provider, ctx.config.agents.defaults)
+
+			agent.on('stream:text', (text) => {
+				ctx.conn.socket.send(
+					JSON.stringify({
+						jsonrpc: '2.0',
+						method: 'session.stream',
+						params: { sessionId, type: 'text', data: text },
+					}),
+				)
+			})
+
+			agent.on('stream:tool_start', (data) => {
+				ctx.conn.socket.send(
+					JSON.stringify({
+						jsonrpc: '2.0',
+						method: 'session.stream',
+						params: { sessionId, type: 'tool_start', data },
+					}),
+				)
+			})
+
+			agent.on('stream:tool_result', (data) => {
+				ctx.conn.socket.send(
+					JSON.stringify({
+						jsonrpc: '2.0',
+						method: 'session.stream',
+						params: { sessionId, type: 'tool_result', data },
+					}),
+				)
+			})
+
+			agent.on('stream:error', (err) => {
+				ctx.conn.socket.send(
+					JSON.stringify({
+						jsonrpc: '2.0',
+						method: 'session.stream',
+						params: { sessionId, type: 'error', data: { message: err.message } },
+					}),
+				)
+			})
+
+			agent.on('stream:end', () => {
+				ctx.conn.socket.send(
+					JSON.stringify({
+						jsonrpc: '2.0',
+						method: 'session.stream',
+						params: { sessionId, type: 'end' },
+					}),
+				)
+			})
+
+			await agent.runStreaming(ctx.sessions, sessionId, content)
+			return { ok: true }
 		})
 
 		this.router.register('gateway.status', (_params, ctx) => {

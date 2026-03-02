@@ -28,11 +28,19 @@ export interface Session {
 	metadata: Record<string, unknown>
 }
 
+export interface ToolCallBlock {
+	id: string
+	name: string
+	input: Record<string, unknown>
+}
+
 export interface Message {
 	id: string
 	role: 'user' | 'assistant' | 'system' | 'tool'
 	content: string
 	timestamp: Date
+	toolCalls?: ToolCallBlock[]
+	toolCallId?: string
 	channelMeta?: Record<string, unknown>
 }
 

@@ -4,6 +4,7 @@ export type {
 	JsonRpcNotification,
 	Session,
 	Message,
+	ToolCallBlock,
 	Connection,
 } from './types.js'
 

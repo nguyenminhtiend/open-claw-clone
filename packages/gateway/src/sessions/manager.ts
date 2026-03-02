@@ -1,4 +1,10 @@
-import { type Message, type Session, SessionNotFoundError, nanoid } from '@oclaw/shared'
+import {
+	type Message,
+	type Session,
+	SessionNotFoundError,
+	type ToolCallBlock,
+	nanoid,
+} from '@oclaw/shared'
 import { SessionStore } from './store.js'
 
 export interface CreateSessionParams {
@@ -42,12 +48,18 @@ export class SessionManager {
 	}
 
 	addMessage(sessionId: string, role: Message['role'], content: string): Message {
+		return this.addRichMessage(sessionId, { role, content })
+	}
+
+	addRichMessage(
+		sessionId: string,
+		msg: Omit<Message, 'id' | 'timestamp'> & { toolCalls?: ToolCallBlock[]; toolCallId?: string },
+	): Message {
 		const session = this.get(sessionId)
 		const message: Message = {
 			id: nanoid(),
-			role,
-			content,
 			timestamp: new Date(),
+			...msg,
 		}
 		session.messages.push(message)
 		session.lastActiveAt = new Date()

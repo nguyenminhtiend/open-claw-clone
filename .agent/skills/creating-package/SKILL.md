@@ -43,8 +43,7 @@ mkdir -p packages/<name>/src
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "dist",
-    "rootDir": "src"
+    "outDir": "dist"
   },
   "include": ["src", "test"]
 }
