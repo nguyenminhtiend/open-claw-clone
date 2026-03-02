@@ -19,9 +19,10 @@ describe('HookSystem', () => {
     });
     await hooks.emit('test:event', { bar: 'baz' });
     expect(received).not.toBeNull();
-    expect(received!.name).toBe('test:event');
-    expect(received!.data).toEqual({ bar: 'baz' });
-    expect(received!.timestamp).toBeInstanceOf(Date);
+    const r = received as unknown as HookEvent;
+    expect(r.name).toBe('test:event');
+    expect(r.data).toEqual({ bar: 'baz' });
+    expect(r.timestamp).toBeInstanceOf(Date);
   });
 
   it('calls handlers in priority order (higher first)', async () => {

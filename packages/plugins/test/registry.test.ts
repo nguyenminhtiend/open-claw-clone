@@ -1,14 +1,14 @@
-import { mkdtemp, mkdir, rm, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import type { Config } from '@oclaw/config';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { PluginApiFactory } from '../src/api.js';
 import { HookSystem } from '../src/hooks.js';
 import { PluginLoader } from '../src/loader.js';
-import { PluginRegistry } from '../src/registry.js';
-import { PluginApiFactory } from '../src/api.js';
 import type { PluginManifest } from '../src/manifest.js';
+import { PluginRegistry } from '../src/registry.js';
 import type { Plugin, PluginRuntime } from '../src/types.js';
-import type { Config } from '@oclaw/config';
 
 const makeManifest = (id: string, deps: string[] = []): PluginManifest => ({
   id,
@@ -42,7 +42,6 @@ const makeRuntime = (): PluginRuntime => ({
     error: vi.fn(),
     debug: vi.fn(),
     child: vi.fn(),
-    // biome-ignore lint/suspicious/noExplicitAny: test mock
   } as unknown as PluginRuntime['logger'],
   sessions: { size: () => 0 },
 });
@@ -65,7 +64,7 @@ describe('PluginRegistry — topological sort', () => {
           },
         };
       },
-    } satisfies PluginLoader;
+    } as unknown as PluginLoader;
 
     const hooks = new HookSystem();
     const apiFactory = new PluginApiFactory(hooks, makeRuntime());
@@ -95,7 +94,7 @@ describe('PluginRegistry — lifecycle', () => {
           calls.push('stop');
         },
       }),
-    } satisfies PluginLoader;
+    } as unknown as PluginLoader;
 
     const hooks = new HookSystem();
     const apiFactory = new PluginApiFactory(hooks, makeRuntime());
@@ -113,7 +112,7 @@ describe('PluginRegistry — lifecycle', () => {
         manifest,
         status: 'loaded',
       }),
-    } satisfies PluginLoader;
+    } as unknown as PluginLoader;
 
     const hooks = new HookSystem();
     const apiFactory = new PluginApiFactory(hooks, makeRuntime());
@@ -129,7 +128,7 @@ describe('PluginRegistry — lifecycle', () => {
       load: async (_manifest: PluginManifest & { _path: string }): Promise<Plugin> => {
         throw new Error('import failed');
       },
-    } satisfies PluginLoader;
+    } as unknown as PluginLoader;
 
     const hooks = new HookSystem();
     const apiFactory = new PluginApiFactory(hooks, makeRuntime());
@@ -150,7 +149,7 @@ describe('PluginRegistry — lifecycle', () => {
         manifest,
         status: 'loaded',
       }),
-    } satisfies PluginLoader;
+    } as unknown as PluginLoader;
 
     const hooks = new HookSystem();
     const apiFactory = new PluginApiFactory(hooks, makeRuntime());
@@ -176,7 +175,7 @@ describe('PluginRegistry — lifecycle', () => {
           stopOrder.push(manifest.id);
         },
       }),
-    } satisfies PluginLoader;
+    } as unknown as PluginLoader;
 
     const hooks = new HookSystem();
     const apiFactory = new PluginApiFactory(hooks, makeRuntime());
@@ -210,7 +209,7 @@ describe('PluginRegistry — registration', () => {
           });
         },
       }),
-    } satisfies PluginLoader;
+    } as unknown as PluginLoader;
 
     const hooks = new HookSystem();
     const apiFactory = new PluginApiFactory(hooks, makeRuntime());
