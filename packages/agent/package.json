@@ -1,25 +1,25 @@
 {
-	"name": "@oclaw/agent",
-	"version": "0.1.0",
-	"private": true,
-	"type": "module",
-	"main": "dist/index.js",
-	"types": "dist/index.d.ts",
-	"scripts": {
-		"dev": "tsx watch src/index.ts",
-		"build": "tsup",
-		"test": "vitest run --passWithNoTests",
-		"test:watch": "vitest",
-		"typecheck": "tsc --noEmit",
-		"lint": "biome lint --write src",
-		"format": "biome format --write src",
-		"check": "biome check --write src"
-	},
-	"dependencies": {
-		"@anthropic-ai/sdk": "^0.39.0",
-		"@oclaw/config": "workspace:*",
-		"@oclaw/shared": "workspace:*",
-		"openai": "^4.90.0",
-		"tiktoken": "^1.0.21"
-	}
+  "name": "@oclaw/agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsup",
+    "test": "vitest run --passWithNoTests",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome lint --write src",
+    "format": "biome format --write src",
+    "check": "biome check --write src"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "@oclaw/config": "workspace:*",
+    "@oclaw/shared": "workspace:*",
+    "openai": "^4.90.0",
+    "tiktoken": "^1.0.21"
+  }
 }

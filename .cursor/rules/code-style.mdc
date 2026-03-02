@@ -8,23 +8,67 @@ alwaysApply: false
 
 ## Formatting
 
-- **Indent with tabs**, not spaces
+- **Indent with 2 spaces**, not tabs
 - **Single quotes** for strings: `'hello'` not `"hello"`
-- **No semicolons** at the end of statements (ASI handles it)
-- **Trailing commas** everywhere (arrays, objects, function params)
+- **Semicolons always** at the end of statements
+- **Trailing commas** in arrays and objects (es5 style — not in function parameters)
 - Line width: 100 chars
+- Arrow functions always have parens: `(x) => x` not `x => x`
 
 ## Imports
 
-Always use `import type` for type-only imports:
+Always use `import type` for type-only imports. Always use the `node:` protocol for Node.js built-ins:
 
 ```typescript
 // ✅
-import type { Session } from '@oclaw/shared'
-import { createLogger } from '@oclaw/shared'
+import type { Session } from '@oclaw/shared';
+import { createLogger } from '@oclaw/shared';
+import path from 'node:path';
+import fs from 'node:fs';
 
 // ❌
-import { Session, createLogger } from '@oclaw/shared'
+import { Session, createLogger } from '@oclaw/shared';
+import path from 'path';
+```
+
+## No Console
+
+Never use `console.log/warn/error`. Use the logger from `@oclaw/shared` instead:
+
+```typescript
+// ✅
+import { createLogger } from '@oclaw/shared';
+const logger = createLogger('my-module');
+logger.info('something happened');
+
+// ❌
+console.log('something happened');
+```
+
+## No Explicit `any`
+
+Never use `any`. Use `unknown`, proper types, or generics:
+
+```typescript
+// ✅
+function parse(input: unknown): string { ... }
+
+// ❌
+function parse(input: any): string { ... }
+```
+
+## Block Statements
+
+Always use braces for `if`, `for`, `while`, etc.:
+
+```typescript
+// ✅
+if (!found) {
+  throw new Error('not found');
+}
+
+// ❌
+if (!found) throw new Error('not found');
 ```
 
 ## No Unused Symbols
@@ -35,25 +79,27 @@ Never leave unused imports or variables. Remove them immediately.
 
 ```typescript
 // ✅ correct
-import type { Foo } from './types'
-import { bar } from './utils'
-
-const greet = (name: string) => {
-	const msg = `Hello, ${name}`
-	return msg
-}
-
-const items = [
-	'one',
-	'two',
-	'three',
-]
-
-// ❌ wrong — double quotes, semicolons, spaces for indent, missing trailing comma
-import { Foo } from "./types";
+import type { Foo } from './types';
+import { bar } from './utils';
+import path from 'node:path';
 
 const greet = (name: string) => {
   const msg = `Hello, ${name}`;
   return msg;
 };
+
+const items = [
+  'one',
+  'two',
+  'three',
+];
+
+// ❌ wrong — tabs, no semicolons, bare node imports, no braces, any types
+import path from 'path'
+import { Foo } from "./types"
+
+const greet = (name: any) => {
+  const msg = `Hello, ${name}`
+  return msg
+}
 ```

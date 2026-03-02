@@ -1,0 +1,33 @@
+{
+  "name": "@oclaw/tools",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run --passWithNoTests",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome lint --write src",
+    "format": "biome format --write src",
+    "check": "biome check --write src"
+  },
+  "dependencies": {
+    "@oclaw/shared": "workspace:*",
+    "glob": "^11.0.0",
+    "minimatch": "^10.0.0",
+    "zod": "^3.24.0",
+    "zod-to-json-schema": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0"
+  }
+}

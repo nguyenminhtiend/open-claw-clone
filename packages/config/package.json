@@ -1,23 +1,23 @@
 {
-	"name": "@oclaw/config",
-	"version": "0.1.0",
-	"private": true,
-	"type": "module",
-	"main": "dist/index.js",
-	"types": "dist/index.d.ts",
-	"scripts": {
-		"dev": "tsx watch src/index.ts",
-		"build": "tsup",
-		"test": "vitest run --passWithNoTests",
-		"test:watch": "vitest",
-		"typecheck": "tsc --noEmit",
-		"lint": "biome lint --write src",
-		"format": "biome format --write src",
-		"check": "biome check --write src"
-	},
-	"dependencies": {
-		"@oclaw/shared": "workspace:*",
-		"json5": "^2.2.3",
-		"zod": "^3.25.76"
-	}
+  "name": "@oclaw/config",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsup",
+    "test": "vitest run --passWithNoTests",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome lint --write src",
+    "format": "biome format --write src",
+    "check": "biome check --write src"
+  },
+  "dependencies": {
+    "@oclaw/shared": "workspace:*",
+    "json5": "^2.2.3",
+    "zod": "^3.25.76"
+  }
 }
