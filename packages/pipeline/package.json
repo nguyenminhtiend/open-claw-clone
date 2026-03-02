@@ -1,5 +1,5 @@
 {
-  "name": "@oclaw/gateway",
+  "name": "@oclaw/pipeline",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsup",
-    "test": "vitest run",
+    "test": "vitest run --passWithNoTests",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "lint": "biome lint --write src",
@@ -16,18 +16,16 @@
     "check": "biome check --write src"
   },
   "dependencies": {
-    "@hono/node-server": "^1.19.9",
     "@oclaw/agent": "workspace:*",
     "@oclaw/channels": "workspace:*",
     "@oclaw/config": "workspace:*",
-    "@oclaw/pipeline": "workspace:*",
-    "@oclaw/shared": "workspace:*",
-    "hono": "^4.12.3",
-    "nanoid": "^5.1.6",
-    "pino": "^9.14.0",
-    "ws": "^8.19.0"
+    "@oclaw/memory": "workspace:*",
+    "@oclaw/shared": "workspace:*"
   },
   "devDependencies": {
-    "@types/ws": "^8.18.1"
+    "tsup": "^8.4.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.4.5",
+    "vitest": "^3.0.0"
   }
 }

@@ -11,6 +11,8 @@ import {
 } from '@oclaw/channels';
 import { loadConfig } from '@oclaw/config';
 import type { Config } from '@oclaw/config';
+import { createAutoReplyPipeline } from '@oclaw/pipeline';
+import type { PipelineContext } from '@oclaw/pipeline';
 import { UnauthorizedError, createLogger } from '@oclaw/shared';
 import { createHttpApp } from './http/app.js';
 import { startConfigWatcher } from './services/config-watcher.js';
@@ -101,22 +103,19 @@ export class Gateway {
       },
     };
 
+    const pipeline = createAutoReplyPipeline();
+
     this.channelManager = new ChannelManager(async (msg) => {
-      const session = this.sessions.getOrCreate(msg.conversationId, msg.channelId);
-      const provider = ProviderRegistry.fromConfig(config.agents.defaults.provider);
-      const agent = new StreamingAgentLoop(provider, config.agents.defaults);
-
-      agent.on('stream:end', async () => {
-        const lastMsg = session.messages.findLast((m) => m.role === 'assistant');
-        if (lastMsg && typeof lastMsg.content === 'string') {
-          await this.channelManager.sendToChannel(msg.channelId, msg.conversationId, {
-            text: lastMsg.content,
-            format: 'markdown',
-          });
-        }
-      });
-
-      await agent.runStreaming(this.sessions, session.id, msg.content);
+      const ctx: PipelineContext = {
+        message: msg,
+        channel: this.channelManager.getChannel(msg.channelId),
+        services: {
+          sessions: this.sessions,
+          channels: this.channelManager,
+          config,
+        },
+      };
+      await pipeline.run(ctx);
     });
 
     // WebChat is always registered
